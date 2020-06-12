@@ -10,16 +10,16 @@ top_img: https://cdn.jsdelivr.net/gh/Eastwood6/Eastwood6.github.io@master/img/TB
 ---
 
 [TOC]
-![1591938317201](pic/image.png)
+![1591938317201](pic/Image.png)
 
 ## Intro to Design Patterns: Welcome to Design Patterns
 1.joe设计一个simulate duck class,
 2.把所有的features方法都放在一个类里,电话说不是所有鸭子都有fly(),squack()
 3.将fly，squack特性放在单独接口中 但是没有REUSE
-4.动静分离 实现接口   ![image1.png](pic/image1.png)
-5.集成![968743b0d1f92f77fa07a7779b2d5cc5.png](pic/image2.png)
-6 set ![790eb26b10927675e24e20c3cbef4793.png](pic/image3.png)
-7 最终![623d1c6b038dcdeaf5fa6034f32ff603.png](pic/image4.png)
+4.动静分离 实现接口   ![f1410adedafa8a8f05b8dff18e591e5a.png](pic/Image1.png)
+5.集成![968743b0d1f92f77fa07a7779b2d5cc5.png](pic/Image2.png)
+6 set ![790eb26b10927675e24e20c3cbef4793.png](pic/Image3.png)
+7 最终![623d1c6b038dcdeaf5fa6034f32ff603.png](pic/Image4.png)
 
 **The one constant in software development**：change
 **the basis for almost every design pattern**:
@@ -84,9 +84,9 @@ BULLET POINTS P77
 ## The Observer Pattern: Keeping your Objects in the know
 
 **the class diagram**
-![0125f60328f1665a6f89edae6ab2493a.png](pic/image5.png)
+![0125f60328f1665a6f89edae6ab2493a.png](pic/Image5.png)
 
-![4a43042919ed99852b5dfd770ab3e95e.png](pic/image6.png)
+![4a43042919ed99852b5dfd770ab3e95e.png](pic/Image6.png)
 
 
 1 The Weather Monitoring application overview
@@ -124,7 +124,7 @@ The Observer Pattern defines a one-to-many dependency between objects so that wh
 1.Strive for loosely coupled designs between objects that interact
 
 **Java’s built-in Observer Pattern**
-![33bae5bce96714d966bd7374350f6b9b.png](pic/image7.png)
+![33bae5bce96714d966bd7374350f6b9b.png](pic/Image7.png)
 
 ****
 [TOC]
