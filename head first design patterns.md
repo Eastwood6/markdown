@@ -16,7 +16,7 @@ top_img: https://cdn.jsdelivr.net/gh/Eastwood6/Eastwood6.github.io@master/img/TB
 1.joe设计一个simulate duck class,
 2.把所有的features方法都放在一个类里,电话说不是所有鸭子都有fly(),squack()
 3.将fly，squack特性放在单独接口中 但是没有REUSE
-4.动静分离 实现接口   ![f1410adedafa8a8f05b8dff18e591e5a.png](pic/image1.png)
+4.动静分离 实现接口   ![image1.png](pic/image1.png)
 5.集成![968743b0d1f92f77fa07a7779b2d5cc5.png](pic/image2.png)
 6 set ![790eb26b10927675e24e20c3cbef4793.png](pic/image3.png)
 7 最终![623d1c6b038dcdeaf5fa6034f32ff603.png](pic/image4.png)
