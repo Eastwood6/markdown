@@ -273,54 +273,6 @@ WHERE order_num = 20005;`
 
 ## Chapter 11.  Using Data Manipulation Functions    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 1. Understanding Functions    
 **Functions Are Less Portable Than SQL**
 Just about every major Database Management System (DBMS) supports functions that others don't, and sometimes the differences are significant
@@ -1471,20 +1423,162 @@ MySQL handles all indexing and re-indexing automatically after table columns hav
 
 2. Creating Triggers    
 
-    
+   
+
+     **Keep Trigger Names Unique per Database** In MySQL 5 trigger names must be unique per table, but not per database. This means that two tables in the same database can have triggers of the same name
+
+   
+
+   **Input: Triggers are created **
+
+   `CREATE TRIGGER newproduct AFTER INSERT ON products
+   FOR EACH ROW SELECT 'Product added';`
+
+   **Notes**
+
+   - **Only Tables** 
+
+     Triggers are only supported on tables, not on views (and not on temporary tables).
+
+   - Triggers are defined per time per event per table, and only one trigger per time per event per table is allowed. As such, up to six triggers are supported per table (before and after each of `INSERT`, `UPDATE`, and `DELETE`). A single trigger cannot be associated with multiple events or multiple tables, so if you need a trigger to be executed for both `INSERT` and `UPDATE` operations, you'll need to define two triggers.
+
+   
 
 3. Dropping Triggers    
 
-    
+     **Input** `DROP TRIGGER newproduct;`
+
+   • **Analysis**
+   Triggers cannot be updated or overwritten. To modify a trigger, it must be dropped and re-created.
 
 4. Using Triggers    
 
+   <u>INSERT TRiggers</u>
+
+   **Be aware of the following:**
+
+   - Within `INSERT` TRigger code, you can refer to a virtual 
+     table named `NEW` to access the rows being inserted.
+
+   - In a `BEFORE INSERT` trigger, the values in `NEW` 
+     may also be updated (allowing you to change values about to be inserted).
+
+   - For `AUTO_INCREMENT` columns, `NEW` will contain 
+     `0` before and the new automatically generated value after.
+
+   <u>DELETE triggers</u>
+
+   **Be aware of the following**:
+
+   - Within `DELETE` trigger code, you can refer to a virtual table named `OLD` to access the rows being deleted.
+
+   - The values in `OLD` are all read-only and cannot be updated.
+
+   **Input**
+
+   `CREATE TRIGGER deleteorder BEFORE DELETE ON orders
+   FOR EACH ROW
+   BEGIN
+   INSERT INTO archive_orders(order_num, order_date, cust_id)
+   VALUES(OLD.order_num, OLD.order_date, OLD.cust_id);
+   END;`
+
+   **Analysis**
+
+   - It used an `INSERT` statement to save the values in `OLD` (the order about to be deleted) into an archive table named `archive_orders`. (To actually use this example you'll need to create a table named 
+     `archive_orders` with the same columns as `orders`).
+
+   - The advantage of using a `BEFORE DELETE` TRigger (as opposed to an `AFTER DELETE` TRigger) is that if, for some reason, the order could not be archived, the `DELETE` itself will be aborted.
+
+   <u>UPDATE triggers</u>
+   **Be aware of the following**:
+
+   - Within `UPDATE` trigger code, you can refer to a virtual table named `OLD` to access the previous (pre-`UPDATE` statement) values and `NEW` to access the new updated values.
+
+   - In a `BEFORE UPDATE` trigger, the values in `NEW` may also be updated (allowing you to change values about to be used in the `UPDATE` statement).
+
+   - The values in `OLD` are all read-only and cannot be updated.
+
+   **Input**
+
+   `CREATE TRIGGER updatevendor BEFORE UPDATE ON vendors
+   FOR EACH ROW SET NEW.vend_state = Upper(NEW.vend_state);`
+   • **Analysis**
+   Obviously, any data cleanup needs to occur in the `BEFORE UPDATE` statement as it does in this example. Each time a row is updated, the value in `NEW.vend_state` (the value that will be used to update table rows) is replaced with `Upper(NEW.vend_state)`.
+
+   **More on Triggers** 
+
+   here are some important points to keep in mind when using triggers:
+
+   - Trigger support in MySQL 5 is rather rudimentary at best when compared to other DBMSs. There are plans to improve and enhance trigger support in future versions of MySQL.
+
+   - Creating triggers might require special security access. However, trigger execution is automatic. If an INSERT, UPDATE, or DELETE statement may be executed, any associated triggers will be executed, too.
+
+   - Triggers should be used to ensure data consistency (case, formatting, and so on). The advantage of performing this type of processing in a trigger is that it always happens, and happens transparently, regardless of client application.
+
+   - One very interesting use for triggers is in creating an audit trail. Using triggers it would be very easy to log changes (even before and after states if needed) to another table.
+
+   - Unfortunately the CALL statement is not supported in MySQL triggers. This means that stored procedures cannot be invoked from within triggers. Any needed stored procedure code would need to be replicated within the trigger itself.
+
 ## Chapter 26.  Managing Transaction Processing    
+
+**Changing the Default Commit Behavior**
+
+`SET autocommit=0;`
+
+• **Analysis**
+The `autocommit` flag determines whether changes are committed automatically without requiring a manual `COMMIT` statement. Setting `autocommit` to 0 (false) instructs MySQL to not automatically commit changes (until the flag is set back to true).
+
+**Note** **Flag Is Connection Specific** The autocommit flag is per connection, not server-wide.
+
+****
+
 1. Understanding Transaction Processing    
+
+   **Transaction Def**
+
+   Transaction processing is used to maintain database integrity by ensuring that batches of MySQL operations execute completely or not at all.
 
    
 
 2. Controlling Transactions    
+
+   **Input** `START TRANSACTION`
+
+   <u>Using  ROLLBACK</u>
+
+   • **Input**`SELECT * FROM ordertotals;
+   START TRANSACTION;
+   DELETE FROM ordertotals;
+   SELECT * FROM ordertotals;
+   ROLLBACK;
+   SELECT * FROM ordertotals;`
+
+   **Which Statements Can You Roll Back?** Transaction processing is used to manage `INSERT, UPDATE`, and `DELETE` statements. You cannot roll back `SELECT` statements. (There would not be much point in doing so anyway.) You cannot roll back `CREATE` or `DROP` operations. These statements may be used in a transaction block, but if you perform a rollback they will not be undone.
+
+   <u>Using COMMIT</u>
+
+   **Input** 
+
+   `START TRANSACTION;`
+   `DELETE FROM orderitems WHERE order_num = 20010;`
+   `DELETE FROM orders WHERE order_num = 20010;`
+   `COMMIT;`
+
+   • **Analysis**
+   a transaction block is used to ensure that the order is not partially deleted. The final COMMIT statement writes the change only if no error occurred. If the first DELETE worked, but the second failed, the DELETE would not be committed (it would effectively be automatically undone).
+
+   **Using Savepoints**
+
+   • **Input**  **create SAVEPOINT**   `SAVEPOINT delete1;`
+
+   `ROLLBACK TO delete1;`
+
+   **Releasing Savepoints** Savepoints are automatically released after a transaction completes (a ROLLBACK or COMMIT is issued). As of MySQL 5, savepoints can also be explicitly released using RELEASE SAVEPOINT.
+
+   
+
+
 
 ## Chapter 27.  Globalization and Localization    
 1. Understanding Character Sets and Collation Sequences    
@@ -1493,13 +1587,122 @@ MySQL handles all indexing and re-indexing automatically after table columns hav
 
 2. Working with Character Set and Collation Sequences    
 
-    
+   **Input**
+  
+   `SHOW CHARACTER SET;`
+
+  • **Analysis**
+  This statement displays all available character sets, along with the description and default collation for each.
+
+  To see the complete list of supported collations, use this statement:
+
+  • **Input**
+  `SHOW COLLATION;`
+
+  • **Analysis**
+  This statement displays all available collations, along with the character sets to which they apply.
 ## Chapter 28.  Managing Security    
 1. Understanding Access Control    
 
-   
+    But in the real world you'd never use root on a day-to-day basis. Instead, you'd create a series of accounts, some for administration, some for users, some for developers, and so on.
+
+   **Don't Use root** The root login should be considered sacred. Use it only when absolutely needed (perhaps if you cannot get in to other administrative accounts). root should never be used in day-to-day MySQL operations.
 
 2. Managing Users    
+
+    **obtain a list of all user accounts**
+
+   • **Input obtain a list of all user accounts**
+   `USE mysql;`
+   `SELECT user FROM user;`
+
+   **Analysis** The mysql database contains a table named user which contains all user accounts. user contains a column named user that contains the user login name.
+
+   
+
+   <u>Creating User Accounts</u>
+
+   **Input Creating User Accounts** `CREATE USER ben IDENTIFIED BY 'p@$$w0rd';`
+
+   • **Analysis**
+   CREATE USER creates a new user account. A password need not be specified at user account creation time, but this example does specify a password
+
+   **Specifying a Hashed Password** The password specified by `IDENTIFIED BY` is plain text that MySQL will encrypt before saving it in the `user` table. To specify the password as a hashed value, use `IDENTIFIED BY PASSWORD` instead.
+
+   **Using GRANT or INSERT** The GRANT statement (which we will get to shortly) can also create user accounts, but generally CREATE USER is the cleanest and simplest syntax. In addition, it is possible to add users by inserting rows into user directly, but to be safe this is generally not recommended
+
+   • **Input rename a user account**`RENAME USER ben TO bforta;`
+
+   • **Input Deleting User Accounts**`DROP USER bforta;`
+
+   
+
+   <u>Setting Access Rights</u> 
+
+   **user accounts created note**
+
+   With user accounts created, you must next assign access rights and privileges. Newly created user accounts have no access at all. They can log into MySQL but will see no data and will be unable to perform any database operations.
+
+   
+
+   **Input show users rights** `SHOW GRANTS FOR bforta;`
+
+   **Analysis** The output shows that user `bforta` has a single right granted, `USAGE ON *.*`. `USAGE` means no rights at all (not overly intuitive, I know), so the results mean no rights to anything on any database and any table.
+
+   
+
+   **Users Are Defined As user@host** MySQL privileges are defined using a combination of user name and hostname. If no host name is specified, a default hostname of % is used (effectively granting access to the user regardless of the hostname).
+
+   
+
+   **Input grant usages** `GRANT SELECT ON crashcourse.* TO beforta;`
+
+   • Analysis
+   This `GRANT` allows the use of `SELECT` on `crashcourse.*` (`crashcourse` database, all tables). By granting `SELECT` access only, user `bforta` has read-only access to all data in the crashcourse database.
+
+   
+
+   **Input revoke usages**`REVOKE SELECT ON crashcourse.* FROM beforta;`
+
+   
+
+   **GRANT and REVOKE can be used to control access at several levels:**
+
+   - Entire server, using GRANT ALL and REVOKE ALL 
+
+   - Entire database, using ON database.*
+
+   - Specific tables, using ON database.table 
+
+   - Specific columns 
+
+   - Specific stored procedures
+
+   **Rights and Privileges**
+
+   ![1591891339731](C:\Users\hp\AppData\Roaming\Typora\typora-user-images\1591891339731.png)
+
+   ![1591891364477](C:\Users\hp\AppData\Roaming\Typora\typora-user-images\1591891364477.png)
+
+   
+
+   **Granting for the Future** When using `GRANT` and `REVOKE`, the user account must exist, but the objects being referred to need not. This allows administrators to design and implement security before databases and tables are even created.
+
+   A side effect of this is that if a database or table is removed (with a `DROP` statement) any associated access rights will still exist. And if the database or table is re-created in the future, those rights will apply to them.
+
+   
+
+   **Input Simplifying Multiple Grants** `GRANT SELECT, INSERT ON crashcourse.* TO beforta;`
+
+   
+
+   <u>Changing Passwords</u> 
+
+   • **Input Changing Passwords** `SET PASSWORD FOR bforta = Password('n3w p@$$w0rd');`
+
+   • **Input set your own password:**S`ET PASSWORD = Password('n3w p@$$w0rd');`
+
+
 
 ## Chapter 29.  Database Maintenance    
 1. Backing Up Data    
@@ -1512,12 +1715,49 @@ MySQL handles all indexing and re-indexing automatically after table columns hav
 
 3. Diagnosing Startup Problems    
 
-   
+    
 
 4. Review Log Files    
 
 ## Chapter 30.  Improving Performance    
 1. Improving Performance
+
+   Poorly performing databases (and database queries, for that matter) tend to be the most frequent culprits when diagnosing application sluggishness and performance problems.
+
+So, here goes:
+
+- First and foremost, MySQL (like all DBMSs) has specific hardware recommendations. Using any old computer as a database server is fine when learning and playing with MySQL. But production servers should adhere to all recommendations.
+
+- As a rule, critical production DBMSs should run on their own dedicated servers.
+
+- MySQL is preconfigured with a series of default settings that are usually a good place to start. But after a while you might need to tweak memory allocation, buffer sizes, and more. (To see the current settings use SHOW VARIABLES; and SHOW STATUS;.)
+- MySQL is a multi-user multi-threaded DBMS; in other words, it often performs multiple tasks at the same time. And if one of those tasks is executing slowly, all requests will suffer. If you are experiencing unusually poor performance, use SHOW PROCESSLIST to display all active processes (along with their thread IDs and execution time). You can also use the KILL command to terminate a specific process (you'll need to be logged in as an administrator to use that one).
+
+- There is almost always more than one way to write a SELECT statement. Experiment with joins, unions, subqueries, and more to find what is optimum for you and your data.
+
+- Use the EXPLAIN statement to have MySQL explain how it will execute a SELECT statement.
+
+- As a general rule, stored procedures execute quicker than individual MySQL statements.
+
+- Use the right data types, always.
+
+- Never retrieve more data than you need. In other words, no SELECT * (unless you truly do need each and every column).
+
+- Some operations (including INSERT) support an optional DELAYED keyword that, if used, returns control to the calling application immediately and actually performs the operation as soon as possible.
+
+- When importing data, turn off autocommit. You may also want to drop indexes (including FULLTEXT indexes) and then re-create them after the import has completed.
+
+- Database tables must be indexed to improve the performance of data retrieval. Determining what to index is not a trivial task, and involves analyzing used SELECT statements to find recurring WHERE and ORDER BY clauses. If a simple WHERE clause is taking too long to return results, you can bet that the column (or columns) being used is a good candidate for indexing.
+
+- Have a series of complex OR conditions in your SELECT statement? You might see a significant performance improvement by using multiple SELECT statements and UNION statements to connect them.
+
+- Indexes improve the performance of data retrieval, but hurt the performance of data insertion, deletion, and updating. If you have tables that collect data and are not often searched, don't index them until needed. (Indexes can be added and dropped as needed).
+
+- LIKE is slow. As a general rule, you are better off using FULLTEXT rather than LIKE.
+
+- Databases are living entities. A well-optimized set of tables might not be so after a while. As table usage and contents change, so might the ideal optimization and configuration.
+
+- And the most important rule is simply thisevery rule is meant to be broken at some point.
 
 ## terminology
 
