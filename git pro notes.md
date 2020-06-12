@@ -366,7 +366,7 @@ REFERENCES:
 可以利用 #  来引用pull request,commit(SHA),issue
  4. Markdown 211
     有上面标识默认是markdown格式
-![fd066b49b2130950bd1fcfe88e29a7f1.png](pic/Image [2].png)
+![968743b0d1f92f77fa07a7779b2d5cc5.png](pic/Image [2].png)
 ###### Task Lists:
    在pull request description里写task list 会在 pull request里看到
 ![e8b6842a63e823c12eea086ca3cef036.png](pic/Image [3].png)
