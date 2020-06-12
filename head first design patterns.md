@@ -10,21 +10,22 @@ top_img: https://cdn.jsdelivr.net/gh/Eastwood6/Eastwood6.github.io@master/img/TB
 ---
 
 [TOC]
-![b09d3f2dd183aaad2353d2522e2c014e.png](en-resource://database/1566:1)
+![1591938317201](pic/image.png)
 
 ## Intro to Design Patterns: Welcome to Design Patterns
 1.joe设计一个simulate duck class,
 2.把所有的features方法都放在一个类里,电话说不是所有鸭子都有fly(),squack()
 3.将fly，squack特性放在单独接口中 但是没有REUSE
-4.动静分离 实现接口   ![f1410adedafa8a8f05b8dff18e591e5a.png](en-resource://database/1548:1)
-5.集成![968743b0d1f92f77fa07a7779b2d5cc5.png](en-resource://database/1550:1)
-6 set ![790eb26b10927675e24e20c3cbef4793.png](en-resource://database/1556:1)
-7 最终![623d1c6b038dcdeaf5fa6034f32ff603.png](en-resource://database/1552:1)
+4.动静分离 实现接口   ![f1410adedafa8a8f05b8dff18e591e5a.png](pic/image1.png)
+5.集成![968743b0d1f92f77fa07a7779b2d5cc5.png](pic/image2.png)
+6 set ![790eb26b10927675e24e20c3cbef4793.png](pic/image3.png)
+7 最终![623d1c6b038dcdeaf5fa6034f32ff603.png](pic/image4.png)
 
 **The one constant in software development**：change
 **the basis for almost every design pattern**:
 All patterns provide a way to let some part of a system vary independently of all other parts
 **OO software DESIGN PRINCIPLE**
+
 1. Identify the aspects of your application that vary and separate them from what stays the same.
 2. Program to an interface, not an implementation
 3. Favor composition over inheritance(HAS-A can be better than IS-A)
@@ -83,9 +84,9 @@ BULLET POINTS P77
 ## The Observer Pattern: Keeping your Objects in the know
 
 **the class diagram**
-![0125f60328f1665a6f89edae6ab2493a.png](en-resource://database/1607:1)
+![0125f60328f1665a6f89edae6ab2493a.png](pic/image5.png)
 
-![4a43042919ed99852b5dfd770ab3e95e.png](en-resource://database/1609:1)
+![4a43042919ed99852b5dfd770ab3e95e.png](pic/image6.png)
 
 
 1 The Weather Monitoring application overview
@@ -123,10 +124,37 @@ The Observer Pattern defines a one-to-many dependency between objects so that wh
 1.Strive for loosely coupled designs between objects that interact
 
 **Java’s built-in Observer Pattern**
-![33bae5bce96714d966bd7374350f6b9b.png](en-resource://database/1611:1)
+![33bae5bce96714d966bd7374350f6b9b.png](pic/image7.png)
+
+****
+[TOC]
+****
+
+**9 primary pattern**
+
+- singleton pattern   chapter5
+
+- factory pattern  chapter4 
+
+- proxy pattern  chapter11
+
+- strategy pattern  chapter1
+
+- tempolate pattern  chapter8 
+
+- observer pattern  chapter2
+
+- adapter pattern  chapter7
+
+- chain of responsibility pattern     p755
+
+- builder pattern                        p752
+
+3 6 9 10 12 13
 
 index p775
 TOC P851
 
 notes：
 想要最大效率并快速读完本书，你需要完全沉浸在书的内容中，不然效率大打折扣
+

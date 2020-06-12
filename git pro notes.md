@@ -366,10 +366,11 @@ REFERENCES:
 可以利用 #  来引用pull request,commit(SHA),issue
  4. Markdown 211
     有上面标识默认是markdown格式
-![fd066b49b2130950bd1fcfe88e29a7f1.png](en-resource://database/1389:1)
+![fd066b49b2130950bd1fcfe88e29a7f1.png](pic/Image [2].png)
 ###### Task Lists:
    在pull request description里写task list 会在 pull request里看到
-![e8b6842a63e823c12eea086ca3cef036.png](en-resource://database/1391:1)
+![e8b6842a63e823c12eea086ca3cef036.png](pic/Image [3].png)
+
 ###### Quoting:
   用'>'符号引用一段别人的评论/直接框选一段评论按R key，回复comment
 ###### Emoji:
