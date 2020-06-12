@@ -1804,7 +1804,7 @@ chapter 9 regex grammar and Chapter 18.  Full-Text Searching没有完全掌握
 
      语句逻辑图：
 
-     ![1591272341885](C:\Users\hp\AppData\Roaming\Typora\typora-user-images\1591272341885.png)
+     ![1591272341885](pic\1591272341885.png)
 
      像这种 联合 查询同一个表,`vend_id`不是主键（是主键直接是行数平方）情况下：
 
