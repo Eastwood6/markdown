@@ -9,7 +9,9 @@ abbrlink:
 top_img: https://cdn.jsdelivr.net/gh/Eastwood6/Eastwood6.github.io@master/img/TB10Vh7SpXXXXbZaFXXXXXXXXXX-2880-1080.jpg
 ---
 
+
 [TOC]
+
 
 **MYSQL DBMS SQL relation and grammar?**
 the reality is that no two DBMSs implement SQL identically. The SQL taught in this book is specific to MySQL, and while much of the language taught will be usable with other DBMSs, do not assume complete SQL syntax portability.
