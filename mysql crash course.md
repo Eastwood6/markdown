@@ -355,7 +355,7 @@ Commonly Used Numeric Manipulation Functions
 ## Chapter 12.  Summarizing Data    
 1. Using Aggregate Functions    
 
-![1591158719852](C:\Users\hp\AppData\Roaming\Typora\typora-user-images\1591158719852.png)
+![1591158719852](pic/1591158719852.png)
 
 **The Avg()  Function**
 
@@ -705,7 +705,7 @@ MySQL handles all indexing and re-indexing automatically after table columns hav
 
    the word heavy is matched, but this time rope* instructs MySQL to explicitly exclude any row that contains rope* (any word beginning with rope, including ropes, which is why one of the rows was excluded).
 
-   ![1591429434108](C:\Users\hp\AppData\Roaming\Typora\typora-user-images\1591429434108.png)
+   ![1591429434108](pic/1591429434108.png)
 
    **Input**
    `SELECT note_text FROM productnotes WHERE Match(note_text) Against('+rabbit +bait"' IN BOOLEAN MODE);`
@@ -1680,9 +1680,9 @@ The `autocommit` flag determines whether changes are committed automatically wit
 
    **Rights and Privileges**
 
-   ![1591891339731](C:\Users\hp\AppData\Roaming\Typora\typora-user-images\1591891339731.png)
+   ![1591891339731](pic/1591891339731.png)
 
-   ![1591891364477](C:\Users\hp\AppData\Roaming\Typora\typora-user-images\1591891364477.png)
+   ![1591891364477](pic/1591891364477.png)
 
    
 
